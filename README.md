@@ -34,7 +34,20 @@ A production-ready, self-hosted deployment of [Coolify](https://coolify.io) with
 
 ## Quick Start
 
-### Option A: Fresh Ubuntu 24.04 Server (Recommended)
+### One-Line Install (Recommended)
+
+```bash
+# Interactive mode - asks what to install
+curl -fsSL https://raw.githubusercontent.com/bauer-group/DC-Coolify/main/install.sh | sudo bash
+
+# Full installation (server setup + Docker + Coolify)
+curl -fsSL https://raw.githubusercontent.com/bauer-group/DC-Coolify/main/install.sh | sudo bash -s -- --full
+
+# Coolify only (existing Docker host)
+curl -fsSL https://raw.githubusercontent.com/bauer-group/DC-Coolify/main/install.sh | sudo bash -s -- --coolify-only
+```
+
+### Option A: Fresh Ubuntu 24.04 Server (Manual)
 
 ```bash
 # 1. Clone repository
@@ -63,7 +76,7 @@ Use `server-setup/cloud-init.yaml` when provisioning a new VPS:
 - Coolify folders prepared
 - Just copy files and start
 
-### Option C: Existing Docker Host
+### Option C: Existing Docker Host (Manual)
 
 ```bash
 # 1. Clone repository
