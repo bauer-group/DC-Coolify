@@ -1,3 +1,10 @@
+## [0.8.2](https://github.com/bauer-group/DC-Coolify/compare/v0.8.1...v0.8.2) (2025-12-20)
+
+
+### Bug Fixes
+
+* update docker-compose and setup scripts to use environment variables for port configuration and enhance root password generation ([01f15dd](https://github.com/bauer-group/DC-Coolify/commit/01f15dd9fa4b3620907b62c6efd3d6c264ca7303))
+
 ## [0.8.1](https://github.com/bauer-group/DC-Coolify/compare/v0.8.0...v0.8.1) (2025-12-20)
 
 
