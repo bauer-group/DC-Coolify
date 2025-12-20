@@ -86,6 +86,7 @@ if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then
     cp -f "$SCRIPT_DIR/docker-compose.yml" "$INSTALL_DIR/" 2>/dev/null || true
     cp -f "$SCRIPT_DIR/coolify.sh" "$INSTALL_DIR/" 2>/dev/null || true
     cp -f "$SCRIPT_DIR/setup.sh" "$INSTALL_DIR/" 2>/dev/null || true
+    cp -f "$SCRIPT_DIR/update.sh" "$INSTALL_DIR/" 2>/dev/null || true
     cp -f "$SCRIPT_DIR/README.md" "$INSTALL_DIR/" 2>/dev/null || true
 
     # Copy server-setup directory if exists
@@ -101,6 +102,7 @@ fi
 # Make scripts executable
 chmod +x "$INSTALL_DIR/coolify.sh" 2>/dev/null || true
 chmod +x "$INSTALL_DIR/setup.sh" 2>/dev/null || true
+chmod +x "$INSTALL_DIR/update.sh" 2>/dev/null || true
 
 #######################################
 # 3. Generate SSH key (if not exists)
@@ -289,4 +291,8 @@ echo -e "  3. Access Coolify at: ${BLUE}http://${IP}:8000${NC}"
 echo ""
 echo -e "${YELLOW}Management:${NC}"
 echo "  ./coolify.sh start|stop|restart|status|logs|update|backup|restore|destroy|help"
+echo ""
+echo -e "${YELLOW}Updates:${NC}"
+echo "  ./update.sh        - Update scripts from Git repository"
+echo "  ./coolify.sh update - Update Docker images"
 echo ""
