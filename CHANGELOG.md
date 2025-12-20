@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/bauer-group/DC-Coolify/compare/v0.5.0...v0.6.0) (2025-12-20)
+
+
+### Features
+
+* update .gitattributes to ignore permission changes for shell scripts ([e94b370](https://github.com/bauer-group/DC-Coolify/commit/e94b3709ce0f2773bf2253b9e6f5909e682120ea))
+
 # [0.5.0](https://github.com/bauer-group/DC-Coolify/compare/v0.4.0...v0.5.0) (2025-12-20)
 
 
