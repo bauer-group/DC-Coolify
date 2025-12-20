@@ -80,7 +80,7 @@ get_compose_cmd() {
 is_stack_running() {
     # Check if all Coolify containers are running
     local running=0
-    for container in COOLIFY_APPLICATION COOLIFY_DATABASE COOLIFY_REDIS COOLIFY_REALTIME; do
+    for container in coolify-application coolify-db coolify-redis coolify-realtime; do
         if docker ps --format '{{.Names}}' | grep -q "^${container}$"; then
             ((running++))
         fi
@@ -90,7 +90,7 @@ is_stack_running() {
 
 is_stack_stopped() {
     # Check if all Coolify containers are stopped
-    for container in COOLIFY_APPLICATION COOLIFY_DATABASE COOLIFY_REDIS COOLIFY_REALTIME; do
+    for container in coolify-application coolify-db coolify-redis coolify-realtime; do
         if docker ps --format '{{.Names}}' | grep -q "^${container}$"; then
             return 1
         fi
@@ -248,9 +248,9 @@ do_backup() {
 
     # 1. PostgreSQL Dump
     echo -e "${BLUE}[1/4] PostgreSQL Dump...${NC}"
-    if docker exec COOLIFY_DATABASE pg_dump -U coolify -d coolify -F c -f /tmp/coolify.dump 2>/dev/null; then
-        docker cp COOLIFY_DATABASE:/tmp/coolify.dump "$BACKUP_WORK/01_postgres.dump"
-        docker exec COOLIFY_DATABASE rm /tmp/coolify.dump
+    if docker exec coolify-db pg_dump -U coolify -d coolify -F c -f /tmp/coolify.dump 2>/dev/null; then
+        docker cp coolify-db:/tmp/coolify.dump "$BACKUP_WORK/01_postgres.dump"
+        docker exec coolify-db rm /tmp/coolify.dump
         print_success "PostgreSQL dump created"
     else
         print_error "PostgreSQL dump failed!"
@@ -260,11 +260,11 @@ do_backup() {
     # 2. Redis RDB Snapshot
     echo -e "${BLUE}[2/4] Redis Snapshot...${NC}"
     REDIS_PW=$(grep -E "^REDIS_PASSWORD=" "$ENV_FILE" 2>/dev/null | cut -d'=' -f2)
-    LAST_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" COOLIFY_REDIS redis-cli LASTSAVE 2>/dev/null)
-    if docker exec -e REDISCLI_AUTH="$REDIS_PW" COOLIFY_REDIS redis-cli BGSAVE 2>/dev/null | grep -q "started\|scheduled"; then
+    LAST_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" coolify-redis redis-cli LASTSAVE 2>/dev/null)
+    if docker exec -e REDISCLI_AUTH="$REDIS_PW" coolify-redis redis-cli BGSAVE 2>/dev/null | grep -q "started\|scheduled"; then
         # Wait for BGSAVE to complete (max 60 seconds)
         for i in {1..60}; do
-            CURRENT_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" COOLIFY_REDIS redis-cli LASTSAVE 2>/dev/null)
+            CURRENT_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" coolify-redis redis-cli LASTSAVE 2>/dev/null)
             if [ "$CURRENT_SAVE" != "$LAST_SAVE" ]; then
                 break
             fi
@@ -420,7 +420,7 @@ do_restore() {
     # Wait for DB
     echo "    Waiting for database..."
     for i in {1..30}; do
-        if docker exec COOLIFY_DATABASE pg_isready -U coolify -d coolify &>/dev/null; then
+        if docker exec coolify-db pg_isready -U coolify -d coolify &>/dev/null; then
             break
         fi
         sleep 1
@@ -428,16 +428,16 @@ do_restore() {
 
     # Clear and restore database
     echo "    Restoring database..."
-    docker exec COOLIFY_DATABASE dropdb -U coolify --if-exists coolify 2>/dev/null || true
-    docker exec COOLIFY_DATABASE createdb -U coolify coolify 2>/dev/null || true
+    docker exec coolify-db dropdb -U coolify --if-exists coolify 2>/dev/null || true
+    docker exec coolify-db createdb -U coolify coolify 2>/dev/null || true
 
-    docker cp "$RESTORE_WORK/01_postgres.dump" COOLIFY_DATABASE:/tmp/restore.dump
-    if docker exec COOLIFY_DATABASE pg_restore -U coolify -d coolify /tmp/restore.dump 2>/dev/null; then
+    docker cp "$RESTORE_WORK/01_postgres.dump" coolify-db:/tmp/restore.dump
+    if docker exec coolify-db pg_restore -U coolify -d coolify /tmp/restore.dump 2>/dev/null; then
         print_success "PostgreSQL restored"
     else
         print_warning "PostgreSQL restore completed with warnings (this can be normal)"
     fi
-    docker exec COOLIFY_DATABASE rm /tmp/restore.dump
+    docker exec coolify-db rm /tmp/restore.dump
 
     # Stop DB again
     $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" down
