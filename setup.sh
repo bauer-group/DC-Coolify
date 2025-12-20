@@ -3,8 +3,13 @@ set -e
 
 #######################################
 # Coolify Setup Script
-# Creates folders, SSH keys and .env
+# Creates folders, SSH keys, .env and
+# copies files to /opt/coolify
 #######################################
+
+INSTALL_DIR="/opt/coolify"
+ENV_FILE="$INSTALL_DIR/.env"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 #######################################
 # Root Check
@@ -15,15 +20,13 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-ENV_FILE="/opt/coolify/.env"
-
 echo "=== Coolify Setup Script ==="
 echo ""
 
 #######################################
 # 1. Create folder structure
 #######################################
-echo "[1/5] Creating folder structure..."
+echo "[1/6] Creating folder structure..."
 
 # Coolify data folders (mapped into container)
 mkdir -p /data/coolify/{ssh,applications,databases,backups,services}
@@ -36,15 +39,44 @@ mkdir -p /data/coolify/proxy/dynamic
 # System folders for databases and backups
 mkdir -p /data/system/{postgres,redis,backups}
 
-# Config folder
-mkdir -p /opt/coolify
+# Installation folder
+mkdir -p "$INSTALL_DIR"
 
 echo "    Folders created."
 
 #######################################
-# 2. Generate SSH key (if not exists)
+# 2. Copy files to /opt/coolify
 #######################################
-echo "[2/5] Checking SSH keys..."
+echo "[2/6] Installing files..."
+
+# Check if we're already running from /opt/coolify
+if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then
+    echo "    Copying files from $SCRIPT_DIR to $INSTALL_DIR..."
+
+    # Copy main files
+    cp -f "$SCRIPT_DIR/docker-compose.yml" "$INSTALL_DIR/" 2>/dev/null || true
+    cp -f "$SCRIPT_DIR/coolify.sh" "$INSTALL_DIR/" 2>/dev/null || true
+    cp -f "$SCRIPT_DIR/setup.sh" "$INSTALL_DIR/" 2>/dev/null || true
+    cp -f "$SCRIPT_DIR/README.md" "$INSTALL_DIR/" 2>/dev/null || true
+
+    # Copy server-setup directory if exists
+    if [ -d "$SCRIPT_DIR/server-setup" ]; then
+        cp -rf "$SCRIPT_DIR/server-setup" "$INSTALL_DIR/"
+    fi
+
+    echo "    Files installed to $INSTALL_DIR"
+else
+    echo "    Already running from $INSTALL_DIR - skipping copy."
+fi
+
+# Make scripts executable
+chmod +x "$INSTALL_DIR/coolify.sh" 2>/dev/null || true
+chmod +x "$INSTALL_DIR/setup.sh" 2>/dev/null || true
+
+#######################################
+# 3. Generate SSH key (if not exists)
+#######################################
+echo "[3/6] Checking SSH keys..."
 
 SSH_KEY="/data/coolify/ssh/keys/id.root@host.docker.internal"
 
@@ -66,9 +98,9 @@ else
 fi
 
 #######################################
-# 3. Create .env file (if not exists)
+# 4. Create .env file (if not exists)
 #######################################
-echo "[3/5] Checking .env file..."
+echo "[4/6] Checking .env file..."
 
 if [ ! -f "$ENV_FILE" ]; then
     echo "    Creating new .env file with random values..."
@@ -181,9 +213,9 @@ else
 fi
 
 #######################################
-# 4. Set permissions
+# 5. Set permissions
 #######################################
-echo "[4/5] Setting permissions..."
+echo "[5/6] Setting permissions..."
 
 # Coolify folders (User 9999 = www-data in container)
 chown -R 9999:root /data/coolify
@@ -204,38 +236,33 @@ chmod -R 700 /data/system/redis
 chown 9999:root "$ENV_FILE"
 chmod 600 "$ENV_FILE"
 
-# Make management script executable
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -f "$SCRIPT_DIR/coolify.sh" ]; then
-    chmod +x "$SCRIPT_DIR/coolify.sh"
-fi
-
 echo "    Permissions set."
 
 #######################################
-# 5. Summary
+# 6. Summary
 #######################################
-echo "[5/5] Setup completed!"
+echo "[6/6] Setup completed!"
+echo ""
+echo "=== Installation ==="
+echo "Location: $INSTALL_DIR"
 echo ""
 echo "=== Folder Structure ==="
 echo "/data/coolify/"
 echo "  ssh/  applications/  databases/  backups/  services/"
-echo "  proxy/  webhooks-during-maintenance/"
+echo "  proxy/  webhooks-during-maintenance/  sentinel/"
 echo ""
 echo "/data/system/"
 echo "  postgres/  redis/  backups/"
-echo ""
-echo "/opt/coolify/"
-echo "  .env"
 echo ""
 echo "=== Configuration ==="
 echo "ENV file: $ENV_FILE"
 echo ""
 echo "=== Next Steps ==="
-echo "1. Optional: Edit .env (email, timezone, etc.)"
-echo "2. ./coolify.sh start"
+echo "1. Optional: Edit $ENV_FILE (email, timezone, etc.)"
+echo "2. cd $INSTALL_DIR && sudo ./coolify.sh start"
 echo "3. Browser: http://$(hostname -I 2>/dev/null | awk '{print $1}' || echo "localhost"):6000"
 echo ""
 echo "=== Management ==="
+echo "cd $INSTALL_DIR"
 echo "./coolify.sh start|stop|restart|status|logs|update|backup|restore|destroy|help"
 echo ""
