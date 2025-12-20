@@ -215,7 +215,7 @@ docker stop COOLIFY_WATCHTOWER
 | COOLIFY_REALTIME | ghcr.io/coollabsio/coolify-realtime | WebSocket server (Soketi) |
 | COOLIFY_DATABASE | postgres:18 | PostgreSQL database |
 | COOLIFY_REDIS | redis:8 | Cache and queue |
-| COOLIFY_WATCHTOWER | containrrr/watchtower | Auto-update service |
+| COOLIFY_WATCHTOWER | ghcr.io/containrrr/watchtower | Auto-update service |
 
 ## Troubleshooting
 
