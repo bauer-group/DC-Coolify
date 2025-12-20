@@ -110,7 +110,7 @@ do_start() {
     echo ""
 
     cd "$SCRIPT_DIR"
-    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d
+    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" up -d --wait 2>&1
 
     echo ""
     print_success "Coolify Stack started!"
@@ -127,7 +127,7 @@ do_stop() {
     echo ""
 
     cd "$SCRIPT_DIR"
-    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" down
+    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" down 2>&1
 
     echo ""
     print_success "Coolify Stack stopped!"
@@ -142,7 +142,7 @@ do_restart() {
     echo ""
 
     cd "$SCRIPT_DIR"
-    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" restart
+    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" restart 2>&1
 
     echo ""
     print_success "Coolify Stack restarted!"
@@ -581,3 +581,5 @@ case "${1:-}" in
         exit 1
         ;;
 esac
+
+exit 0
