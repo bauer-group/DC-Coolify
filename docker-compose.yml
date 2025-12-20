@@ -87,8 +87,8 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
     ports:
-      - 8001:6001/tcp
-      - 8002:6002/tcp
+      - "${REALTIME_PORT:-6001}:6001/tcp"
+      - "${TERMINAL_PORT:-6002}:6002/tcp"
     environment:
       - TZ=${TIME_ZONE:-UTC}
 

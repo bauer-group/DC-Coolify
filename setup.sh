@@ -151,7 +151,10 @@ if [ ! -f "$ENV_FILE" ]; then
     # Alphanumeric passwords (no special characters for DB compatibility)
     GEN_DB_PASSWORD=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32)
     GEN_REDIS_PASSWORD=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 32)
-    GEN_ROOT_PASSWORD=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 24)
+
+    # Root password needs at least one symbol for Coolify validation
+    # Format: 20 alphanumeric chars + symbol + 3 alphanumeric chars = 24 chars
+    GEN_ROOT_PASSWORD="$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | head -c 20)@$(openssl rand -base64 8 | tr -dc 'a-zA-Z0-9' | head -c 3)"
 
     # Create .env
     cat > "$ENV_FILE" << EOF
@@ -206,8 +209,12 @@ TIME_ZONE=$(cat /etc/timezone 2>/dev/null || echo "UTC")
 
 ###############################################################################
 # NETWORK - Optional (defaults in docker-compose.yml)
+# IMPORTANT: Do NOT change REALTIME_PORT or TERMINAL_PORT unless necessary!
+# Coolify UI expects these on 6001/6002 by default.
 ###############################################################################
-#APPLICATION_PORT=6000
+#APPLICATION_PORT=8000
+#REALTIME_PORT=6001
+#TERMINAL_PORT=6002
 
 ###############################################################################
 # PHP SETTINGS - Optional (defaults in docker-compose.yml)
