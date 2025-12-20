@@ -37,16 +37,20 @@ A production-ready, self-hosted deployment of [Coolify](https://coolify.io) with
 ### Option A: Fresh Ubuntu 24.04 Server (Recommended)
 
 ```bash
-# 1. Run interactive server setup (installs Docker, configures system)
-cd server-setup
+# 1. Clone repository
+git clone https://github.com/bauer-group/DC-Coolify.git /opt/coolify
+cd /opt/coolify && chmod +x *.sh server-setup/*.sh
+
+# 2. Run interactive server setup (installs Docker, configures system)
+cd /opt/coolify/server-setup
 sudo ./install.sh
 # System will reboot
 
-# 2. After reboot, run Coolify setup
+# 3. After reboot, run Coolify setup
 cd /opt/coolify
 sudo ./setup.sh
 
-# 3. Start Coolify
+# 4. Start Coolify
 sudo ./coolify.sh start
 ```
 
@@ -62,8 +66,9 @@ Use `server-setup/cloud-init.yaml` when provisioning a new VPS:
 ### Option C: Existing Docker Host
 
 ```bash
-# 1. Copy files to your server
-cd /opt/coolify
+# 1. Clone repository
+git clone https://github.com/bauer-group/DC-Coolify.git /opt/coolify
+cd /opt/coolify && chmod +x *.sh
 
 # 2. Run setup (creates folders, SSH keys, .env)
 sudo ./setup.sh
@@ -343,6 +348,45 @@ Cloud-init pulls scripts from a Git repository and executes them automatically.
 cd /opt/coolify
 sudo ./setup.sh
 sudo ./coolify.sh start
+```
+
+## Updating the Stack
+
+### Update Scripts from Repository
+
+To update the scripts to the latest version (overwrites local changes):
+
+```bash
+cd /opt/coolify
+
+# Stop the stack first
+sudo ./coolify.sh stop
+
+# Fetch and reset to latest version (discards local changes!)
+git fetch origin
+git reset --hard origin/main
+
+# Restart the stack
+sudo ./coolify.sh start
+```
+
+**Keep local changes** (merge instead of overwrite):
+
+```bash
+cd /opt/coolify
+git stash                    # Save local changes
+git pull origin main         # Pull latest
+git stash pop                # Reapply local changes (may need manual merge)
+```
+
+### Update Container Images
+
+Container images are updated automatically by Watchtower every Saturday at 03:00.
+
+To update manually:
+
+```bash
+sudo ./coolify.sh update
 ```
 
 ## Security Considerations

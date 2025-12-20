@@ -123,8 +123,9 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     expose:
       - 5432/tcp
-    volumes:      
-      - /data/system/postgres:/var/lib/postgresql/data
+    volumes:
+      # PostgreSQL 18+ uses /var/lib/postgresql (creates subdirectory for version)
+      - /data/system/postgres:/var/lib/postgresql
     networks:
       coolify:
     healthcheck:
