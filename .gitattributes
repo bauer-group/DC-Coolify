@@ -1,8 +1,8 @@
 # Set default behavior to automatically normalize line endings
 * text=auto
 
-# Shell scripts must use LF (Unix) line endings
-*.sh text eol=lf
+# Shell scripts must use LF (Unix) line endings and ignore permission changes
+*.sh text eol=lf -diff=chmod
 
 # YAML files should use LF
 *.yml text eol=lf
