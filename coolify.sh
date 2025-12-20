@@ -260,9 +260,16 @@ do_backup() {
     # 2. Redis RDB Snapshot
     echo -e "${BLUE}[2/4] Redis Snapshot...${NC}"
     REDIS_PW=$(grep -E "^REDIS_PASSWORD=" "$ENV_FILE" 2>/dev/null | cut -d'=' -f2)
-    if docker exec COOLIFY_REDIS redis-cli -a "$REDIS_PW" BGSAVE 2>/dev/null | grep -q "started\|scheduled"; then
-        # Wait for BGSAVE to complete
-        sleep 3
+    LAST_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" COOLIFY_REDIS redis-cli LASTSAVE 2>/dev/null)
+    if docker exec -e REDISCLI_AUTH="$REDIS_PW" COOLIFY_REDIS redis-cli BGSAVE 2>/dev/null | grep -q "started\|scheduled"; then
+        # Wait for BGSAVE to complete (max 60 seconds)
+        for i in {1..60}; do
+            CURRENT_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" COOLIFY_REDIS redis-cli LASTSAVE 2>/dev/null)
+            if [ "$CURRENT_SAVE" != "$LAST_SAVE" ]; then
+                break
+            fi
+            sleep 1
+        done
         if cp /data/system/redis/dump.rdb "$BACKUP_WORK/02_redis.rdb" 2>/dev/null; then
             print_success "Redis snapshot created"
         else

@@ -71,12 +71,15 @@ EOF
 sysctl -p /etc/sysctl.d/98-docker.conf >/dev/null 2>&1 || true
 
 # Docker daemon configuration with IPv6 support
+# Network ranges:
+#   - docker0 bridge:    10.10.0.0/17     (IPv4), fdff::/64 (IPv6)
+#   - container pools:   10.10.128.0/17   (IPv4), fdff:1::/48 -> /64 per network (IPv6)
 mkdir -p /etc/docker/
 cat > /etc/docker/daemon.json << 'EOF'
 {
   "bip": "10.10.0.1/17",
   "ipv6": true,
-  "fixed-cidr-v6": "fdff:0::/64",
+  "fixed-cidr-v6": "fdff::/64",
   "default-address-pools": [
     {
       "base": "10.10.128.0/17",
@@ -97,15 +100,20 @@ print_success "Docker configured with IPv6 support"
 #######################################
 echo "[5/5] Creating IPv6 NAT service..."
 
+# NAT for both IPv6 ranges:
+#   - fdff::/64     = docker0 bridge network
+#   - fdff:1::/48   = container network pool
 cat > /usr/lib/systemd/system/docker-support.service << 'EOF'
 [Unit]
-Description=IPv6 Setup for Docker Network
+Description=IPv6 NAT for Docker Networks
 BindsTo=docker.service
+After=docker.service
 ReloadPropagatedFrom=docker.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/sbin/ip6tables -t nat -A POSTROUTING -s fdff::/64 ! -o docker0 -j MASQUERADE
+ExecStart=/bin/sh -c '/usr/sbin/ip6tables -t nat -A POSTROUTING -s fdff::/64 ! -o docker0 -j MASQUERADE && /usr/sbin/ip6tables -t nat -A POSTROUTING -s fdff:1::/48 ! -o docker0 -j MASQUERADE'
+ExecStop=/bin/sh -c '/usr/sbin/ip6tables -t nat -D POSTROUTING -s fdff::/64 ! -o docker0 -j MASQUERADE 2>/dev/null; /usr/sbin/ip6tables -t nat -D POSTROUTING -s fdff:1::/48 ! -o docker0 -j MASQUERADE 2>/dev/null; true'
 RemainAfterExit=yes
 
 [Install]
