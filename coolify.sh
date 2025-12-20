@@ -454,9 +454,15 @@ do_restore() {
 do_destroy() {
     print_header
     check_root "destroy"
-    check_requirements
 
-    print_warning "WARNING: This will stop all containers and delete all volumes!"
+    print_warning "WARNING: This will completely remove Coolify!"
+    echo ""
+    echo "This will delete:"
+    echo "  - All Docker containers and volumes"
+    echo "  - Environment file (.env)"
+    echo "  - SSH key from authorized_keys"
+    echo ""
+    echo "Data in /data/coolify and /data/system will NOT be deleted."
     echo ""
     read -p "Are you sure? (yes/no): " CONFIRM
 
@@ -468,13 +474,39 @@ do_destroy() {
     echo ""
     echo "Destroying Coolify Stack..."
 
+    # Stop and remove containers
     cd "$SCRIPT_DIR"
-    $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" down -v --remove-orphans
+    if [ -f "$COMPOSE_FILE" ] && [ -f "$ENV_FILE" ]; then
+        $(get_compose_cmd) --env-file "$ENV_FILE" -f "$COMPOSE_FILE" down -v --remove-orphans 2>/dev/null || true
+    fi
+
+    # Remove .env file
+    echo "Removing .env file..."
+    rm -f "$ENV_FILE"
+
+    # Remove SSH key from authorized_keys
+    echo "Removing SSH key from authorized_keys..."
+    SSH_PUBKEY="/data/coolify/ssh/keys/id.root@host.docker.internal.pub"
+    if [ -f "$SSH_PUBKEY" ] && [ -f ~/.ssh/authorized_keys ]; then
+        # Get the key content and remove it from authorized_keys
+        KEY_CONTENT=$(cat "$SSH_PUBKEY" 2>/dev/null)
+        if [ -n "$KEY_CONTENT" ]; then
+            grep -vF "$KEY_CONTENT" ~/.ssh/authorized_keys > ~/.ssh/authorized_keys.tmp 2>/dev/null || true
+            mv ~/.ssh/authorized_keys.tmp ~/.ssh/authorized_keys 2>/dev/null || true
+            chmod 600 ~/.ssh/authorized_keys 2>/dev/null || true
+        fi
+    fi
 
     echo ""
     print_success "Coolify Stack destroyed!"
-    print_warning "Data in /data/coolify and /data/system was NOT deleted."
-    echo "To delete completely: rm -rf /data/coolify /data/system /opt/coolify"
+    echo ""
+    echo "Remaining data (not deleted):"
+    echo "  /data/coolify  - Application data, SSH keys, backups"
+    echo "  /data/system   - PostgreSQL, Redis data"
+    echo "  /opt/coolify   - Scripts (docker-compose.yml, coolify.sh, etc.)"
+    echo ""
+    echo "To delete everything:"
+    echo "  rm -rf /data/coolify /data/system /opt/coolify"
 }
 
 do_help() {
