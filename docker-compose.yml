@@ -167,7 +167,7 @@ services:
 
   ### Auto-Update Service ###
   watchtower:
-    image: ghcr.io/containrrr/watchtower:latest
+    image: containrrr/watchtower:latest
     restart: unless-stopped
     container_name: COOLIFY_WATCHTOWER
     environment:
