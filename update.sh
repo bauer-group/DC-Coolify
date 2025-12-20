@@ -41,6 +41,11 @@ echo ""
 cd "$INSTALL_DIR"
 
 #######################################
+# Ignore file permission changes
+#######################################
+git config core.fileMode false
+
+#######################################
 # Check if git repo exists
 #######################################
 if [ ! -d ".git" ]; then
@@ -49,6 +54,7 @@ if [ ! -d ".git" ]; then
     rm -rf coolify
     git clone "$REPO_URL" coolify
     cd coolify
+    git config core.fileMode false
     print_success "Repository cloned"
 else
     #######################################
