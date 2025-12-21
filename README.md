@@ -239,7 +239,7 @@ docker stop COOLIFY_WATCHTOWER
 sudo systemctl status docker
 
 # Check for port conflicts
-sudo netstat -tlnp | grep -E '6000|6001|6002'
+sudo netstat -tlnp | grep -E '8000|6001|6002'
 
 # View detailed logs
 sudo ./coolify.sh logs

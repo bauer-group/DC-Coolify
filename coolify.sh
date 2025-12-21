@@ -163,8 +163,8 @@ do_status() {
     echo -e "${BLUE}=== Access ===${NC}"
 
     # Port from .env or default
-    APP_PORT=$(grep -E "^APPLICATION_PORT=" "$ENV_FILE" 2>/dev/null | cut -d'=' -f2 || echo "6000")
-    APP_PORT=${APP_PORT:-6000}
+    APP_PORT=$(grep -E "^APPLICATION_PORT=" "$ENV_FILE" 2>/dev/null | cut -d'=' -f2 || echo "8000")
+    APP_PORT=${APP_PORT:-8000}
 
     HOST_IP=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "localhost")
 
