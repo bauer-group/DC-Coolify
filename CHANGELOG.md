@@ -1,3 +1,10 @@
+# [0.10.0](https://github.com/bauer-group/DC-Coolify/compare/v0.9.0...v0.10.0) (2025-12-22)
+
+
+### Features
+
+* add PUSHER_HOST and PUSHER_PORT configuration options and update setup script for improved WebSocket support ([1cc38ec](https://github.com/bauer-group/DC-Coolify/commit/1cc38eceae8825b2ea2a6890ff584d271bff05ba))
+
 # [0.9.0](https://github.com/bauer-group/DC-Coolify/compare/v0.8.12...v0.9.0) (2025-12-22)
 
 
