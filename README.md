@@ -199,7 +199,11 @@ Edit `/opt/coolify/.env` to customize:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
+| `PUSHER_HOST` | (server IP) | WebSocket host - must be reachable from browser |
+| `PUSHER_PORT` | 6001 | WebSocket port (use 443 for HTTPS/Traefik) |
 | `APPLICATION_PORT` | 8000 | Coolify web interface port |
+| `REALTIME_PORT` | 6001 | Soketi realtime port |
+| `TERMINAL_PORT` | 6002 | Web terminal port |
 | `COOLIFY_VERSION` | latest | Coolify image version |
 | `POSTGRES_VERSION` | 18 | PostgreSQL version |
 | `REDIS_VERSION` | 8 | Redis version |
@@ -207,6 +211,29 @@ Edit `/opt/coolify/.env` to customize:
 | `COOLIFY_PHP_MEMORY_LIMIT` | 256M | PHP memory limit |
 | `REDIS_MEMORYLIMIT` | 1gb | Redis max memory |
 | `DATABASE_POOLMAXSIZE` | 100 | PostgreSQL max connections |
+
+### WebSocket Configuration
+
+Coolify uses WebSockets for realtime updates (port 6001) and web terminal (port 6002).
+
+**HTTP access (`:8000`):**
+
+```env
+PUSHER_HOST=<server-ip>
+PUSHER_PORT=6001
+```
+
+**HTTPS access (via Traefik with domain):**
+
+```env
+PUSHER_HOST=example.com
+PUSHER_PORT=443
+```
+
+When using HTTPS, Traefik automatically routes:
+
+- `/app` → `coolify-realtime:6001` (realtime)
+- `/terminal/ws` → `coolify-realtime:6002` (terminal)
 
 ### Auto-Updates
 

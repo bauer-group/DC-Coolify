@@ -11,6 +11,15 @@ INSTALL_DIR="/opt/coolify"
 ENV_FILE="$INSTALL_DIR/.env"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Load server.conf if exists (for PUSHER_HOST, PUSHER_PORT, etc.)
+if [ -f "$SCRIPT_DIR/server-setup/server.conf" ]; then
+    # shellcheck source=/dev/null
+    source "$SCRIPT_DIR/server-setup/server.conf"
+elif [ -f "/opt/coolify/server-setup/server.conf" ]; then
+    # shellcheck source=/dev/null
+    source "/opt/coolify/server-setup/server.conf"
+fi
+
 #######################################
 # Colors and Output
 #######################################
