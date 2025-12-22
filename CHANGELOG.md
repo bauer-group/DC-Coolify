@@ -1,3 +1,10 @@
+## [0.8.6](https://github.com/bauer-group/DC-Coolify/compare/v0.8.5...v0.8.6) (2025-12-22)
+
+
+### Bug Fixes
+
+* improve variable declaration and shellcheck compliance in scripts ([a3ab7c1](https://github.com/bauer-group/DC-Coolify/commit/a3ab7c1ce597f22a984921c5962c8fa6ad14a7d1))
+
 ## [0.8.5](https://github.com/bauer-group/DC-Coolify/compare/v0.8.4...v0.8.5) (2025-12-22)
 
 
