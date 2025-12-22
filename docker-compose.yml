@@ -189,7 +189,7 @@ services:
 networks:
   coolify:
     driver: bridge
-    name: COOLIFY
+    name: coolify
     enable_ipv6: true
     ipam:
       config:
