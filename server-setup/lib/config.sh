@@ -9,6 +9,7 @@ CONFIG_FILE="${CONFIG_FILE:-$SCRIPT_DIR/server.conf}"
 
 # Load config file if exists
 if [ -f "$CONFIG_FILE" ]; then
+    # shellcheck source=/dev/null
     source "$CONFIG_FILE"
 fi
 

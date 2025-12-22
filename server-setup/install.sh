@@ -44,6 +44,7 @@ if [ -f "$CONFIG_FILE" ]; then
     cat "$CONFIG_FILE" | grep -v "^#" | grep -v "^$" | head -20
     echo ""
     if confirm "Use this configuration?" "y"; then
+        # shellcheck source=/dev/null
         source "$CONFIG_FILE"
         INTERACTIVE=false
     else

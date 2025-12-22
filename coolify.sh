@@ -263,7 +263,7 @@ do_backup() {
     LAST_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" coolify-redis redis-cli LASTSAVE 2>/dev/null)
     if docker exec -e REDISCLI_AUTH="$REDIS_PW" coolify-redis redis-cli BGSAVE 2>/dev/null | grep -q "started\|scheduled"; then
         # Wait for BGSAVE to complete (max 60 seconds)
-        for i in {1..60}; do
+        for _ in {1..60}; do
             CURRENT_SAVE=$(docker exec -e REDISCLI_AUTH="$REDIS_PW" coolify-redis redis-cli LASTSAVE 2>/dev/null)
             if [ "$CURRENT_SAVE" != "$LAST_SAVE" ]; then
                 break
@@ -419,7 +419,7 @@ do_restore() {
 
     # Wait for DB
     echo "    Waiting for database..."
-    for i in {1..30}; do
+    for _ in {1..30}; do
         if docker exec coolify-db pg_isready -U coolify -d coolify &>/dev/null; then
             break
         fi

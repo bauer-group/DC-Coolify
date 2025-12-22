@@ -272,7 +272,8 @@ start_coolify() {
 # Print Summary
 #######################################
 print_summary() {
-    local IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+    local IP
+    IP=$(hostname -I 2>/dev/null | awk '{print $1}')
     IP=${IP:-localhost}
 
     echo ""
