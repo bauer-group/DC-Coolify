@@ -1,3 +1,10 @@
+## [0.8.11](https://github.com/bauer-group/DC-Coolify/compare/v0.8.10...v0.8.11) (2025-12-22)
+
+
+### Bug Fixes
+
+* update PHP-FPM server settings to improve performance ([1cee800](https://github.com/bauer-group/DC-Coolify/commit/1cee800f155698406fa01786d9c99e6d700e3641))
+
 ## [0.8.10](https://github.com/bauer-group/DC-Coolify/compare/v0.8.9...v0.8.10) (2025-12-22)
 
 
