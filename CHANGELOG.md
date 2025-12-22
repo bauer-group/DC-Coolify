@@ -1,3 +1,11 @@
+## [0.8.7](https://github.com/bauer-group/DC-Coolify/compare/v0.8.6...v0.8.7) (2025-12-22)
+
+
+### Bug Fixes
+
+* add additional DNS nameservers for improved network resolution ([24c9282](https://github.com/bauer-group/DC-Coolify/commit/24c9282e54e6f839ba83da5069e72b9a09853ea1))
+* update Soketi port numbers and standardize container names in README ([0bb830a](https://github.com/bauer-group/DC-Coolify/commit/0bb830a89bcf096047eb8e32d1c69fecbb344ca0))
+
 ## [0.8.6](https://github.com/bauer-group/DC-Coolify/compare/v0.8.5...v0.8.6) (2025-12-22)
 
 
