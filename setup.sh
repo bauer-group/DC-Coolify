@@ -239,8 +239,8 @@ TIME_ZONE=$GEN_TIMEZONE
 ###############################################################################
 #COOLIFY_PHP_MEMORY_LIMIT=256M
 #COOLIFY_PHP_FPM_PM_CONTROL=dynamic
-#COOLIFY_PHP_FPM_PM_START_SERVERS=1
-#COOLIFY_PHP_FPM_PM_MIN_SPARE_SERVERS=1
+#COOLIFY_PHP_FPM_PM_START_SERVERS=2
+#COOLIFY_PHP_FPM_PM_MIN_SPARE_SERVERS=2
 #COOLIFY_PHP_FPM_PM_MAX_SPARE_SERVERS=10
 
 ###############################################################################
