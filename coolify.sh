@@ -536,7 +536,7 @@ do_help() {
     echo "  $0 update"
     echo ""
     echo -e "${BLUE}Services:${NC}"
-    echo "  coolify, soketi-server, database-server, redis-server, watchtower"
+    echo "  coolify, coolify-realtime, database-server, redis-server, watchtower"
     echo ""
 }
 

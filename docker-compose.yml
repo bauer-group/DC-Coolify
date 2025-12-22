@@ -36,7 +36,7 @@ services:
         - PUSHER_APP_ID=${PUSHER_APP_ID}
         - PUSHER_APP_KEY=${PUSHER_APP_KEY}
         - PUSHER_APP_SECRET=${PUSHER_APP_SECRET}
-        - PUSHER_HOST=soketi-server
+        - PUSHER_HOST=coolify-realtime
         - PUSHER_PORT=6001
 
         - SSH_MUX_ENABLED=false
