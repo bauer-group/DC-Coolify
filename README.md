@@ -21,7 +21,7 @@ A production-ready, self-hosted deployment of [Coolify](https://coolify.io) with
 +------------------+    +------------------+ | +------------------+
 |     Coolify      |    |      Soketi      | | |    PostgreSQL    |
 |   Application    |--->|    (Realtime)    | | |    (Database)    |
-|    Port 8000     |    |   Ports 8001/2   | | |                  |
+|    Port 8000     |    |   Ports 6001/2   | | |                  |
 +------------------+    +------------------+ | +------------------+
          |                                   |          |
          +-----------------------------------+----------+
@@ -97,7 +97,7 @@ sudo ./coolify.sh start
 - Linux server (Ubuntu 24.04 LTS recommended)
 - Docker 20.10+ with Compose v2
 - Root access
-- Ports: 8000 (Coolify), 8001-8002 (Soketi/Realtime)
+- Ports: 8000 (Coolify), 6001-6002 (Soketi/Realtime)
 
 ## File Structure
 
@@ -217,18 +217,18 @@ Watchtower automatically updates containers weekly:
 
 To disable auto-updates, remove or stop the watchtower service:
 ```bash
-docker stop COOLIFY_WATCHTOWER
+docker stop coolify-watchtower
 ```
 
 ## Services
 
 | Container | Image | Purpose |
 |-----------|-------|---------|
-| COOLIFY_APPLICATION | ghcr.io/coollabsio/coolify | Main application |
-| COOLIFY_REALTIME | ghcr.io/coollabsio/coolify-realtime | WebSocket server (Soketi) |
-| COOLIFY_DATABASE | postgres:18 | PostgreSQL database |
-| COOLIFY_REDIS | redis:8 | Cache and queue |
-| COOLIFY_WATCHTOWER | ghcr.io/containrrr/watchtower | Auto-update service |
+| coolify-application | ghcr.io/coollabsio/coolify | Main application |
+| coolify-realtime | ghcr.io/coollabsio/coolify-realtime | WebSocket server (Soketi) |
+| coolify-db | postgres:18 | PostgreSQL database |
+| coolify-redis | redis:8 | Cache and queue |
+| coolify-watchtower | containrrr/watchtower | Auto-update service |
 
 ## Troubleshooting
 
@@ -249,7 +249,7 @@ sudo ./coolify.sh logs
 
 ```bash
 # Check database health
-docker exec COOLIFY_DATABASE pg_isready -U coolify -d coolify
+docker exec coolify-db pg_isready -U coolify -d coolify
 
 # View database logs
 sudo ./coolify.sh logs database-server
