@@ -104,8 +104,8 @@ if [ "$INTERACTIVE" = true ]; then
     esac
 
     # Timezone
-    read -p "Timezone [Europe/Berlin]: " input
-    TIMEZONE="${input:-Europe/Berlin}"
+    read -p "Timezone [UTC]: " input
+    TIMEZONE="${input:-UTC}"
 
     # Network Configuration
     print_header "Network Configuration"

@@ -66,7 +66,7 @@ write_files:
 
       HOSTNAME="coolify-server"
       LOCALE="de_DE.UTF-8"
-      TIMEZONE="Europe/Berlin"
+      TIMEZONE="UTC"
 
       NTP_SERVERS="time.bauer-group.com 0.de.pool.ntp.org 1.de.pool.ntp.org 2.de.pool.ntp.org 3.de.pool.ntp.org"
       NTP_FALLBACK="ptbtime1.ptb.de ptbtime2.ptb.de ptbtime3.ptb.de"

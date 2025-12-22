@@ -18,7 +18,7 @@ fi
 #######################################
 HOSTNAME="${HOSTNAME:-coolify-server}"
 LOCALE="${LOCALE:-de_DE.UTF-8}"
-TIMEZONE="${TIMEZONE:-Europe/Berlin}"
+TIMEZONE="${TIMEZONE:-UTC}"
 
 #######################################
 # NTP Configuration
