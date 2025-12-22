@@ -1,3 +1,10 @@
+## [0.8.12](https://github.com/bauer-group/DC-Coolify/compare/v0.8.11...v0.8.12) (2025-12-22)
+
+
+### Bug Fixes
+
+* update soketi-server references to coolify-realtime in scripts and configuration ([c98f58c](https://github.com/bauer-group/DC-Coolify/commit/c98f58c83959e555952e73b40662e201c746499e))
+
 ## [0.8.11](https://github.com/bauer-group/DC-Coolify/compare/v0.8.10...v0.8.11) (2025-12-22)
 
 
