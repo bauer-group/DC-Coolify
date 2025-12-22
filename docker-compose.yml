@@ -71,7 +71,7 @@ services:
           condition: service_healthy
         redis-server:
           condition: service_healthy
-        soketi-server:
+        coolify-realtime:
           condition: service_healthy
       expose:
         - 8080/tcp
@@ -80,12 +80,15 @@ services:
 
 
   ### Support Services ###
-  soketi-server:
+  coolify-realtime:
     image: ghcr.io/coollabsio/coolify-realtime:${SOCKETI_VERSION:-1.0.10}
     restart: unless-stopped
     container_name: coolify-realtime
     labels:
       - com.centurylinklabs.watchtower.enable=true
+    expose:
+      - 6001/tcp
+      - 6002/tcp
     ports:
       - "${REALTIME_PORT:-6001}:6001/tcp"
       - "${TERMINAL_PORT:-6002}:6002/tcp"
