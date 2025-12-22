@@ -235,7 +235,7 @@ ENVFILE
 #COOLIFY_VERSION=latest
 #POSTGRES_VERSION=18
 #REDIS_VERSION=8
-#SOCKETI_VERSION=1.0.10
+#SOCKETI_VERSION=latest
 
 ###############################################################################
 # TIMEZONE - Optional (automatically detected from host)
