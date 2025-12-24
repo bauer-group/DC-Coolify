@@ -14,7 +14,7 @@
 #######################################
 # Basic Settings
 #######################################
-hostname: coolify-server
+hostname: coolify-server.somedomain.com
 manage_etc_hosts: true
 locale: de_DE.UTF-8
 timezone: UTC
