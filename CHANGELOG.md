@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/bauer-group/CS-Coolify/compare/v0.11.0...v0.11.1) (2025-12-29)
+
+
+### Bug Fixes
+
+* update repository URLs to point to CS-Coolify ([11c41a7](https://github.com/bauer-group/CS-Coolify/commit/11c41a7910810eb4b6b73c0243827c56b301d439))
+
 # [0.11.0](https://github.com/bauer-group/CS-Coolify/compare/v0.10.4...v0.11.0) (2025-12-24)
 
 
